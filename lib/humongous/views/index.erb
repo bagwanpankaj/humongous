@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Humongous</title>
+    <meta name="description" content="Humongous">
+    <meta name="author" content="Bagwan Pankaj">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/styles/bootstrap.min.css" rel="stylesheet">
+    <link href="/styles/application.css" rel="stylesheet">
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/images/apple-touch-icon-114x114.png">
+    
+    <script type='text/javascript' src='/javascripts/jquery.min.js'></script>
+    <script type='text/javascript' src='/javascripts/jquery.nohtml.js'></script>
+    <script type='text/javascript' src='/javascripts/bootstrap-modal.js'></script>
+    
+    <script type='text/javascript' src='/javascripts/core.js'></script>
+    <script type='text/javascript' src='/javascripts/storage.js'></script>
+    <script type='text/javascript' src='/javascripts/query_browser.js'></script>
+    <script type='text/javascript' src='/javascripts/application.js'></script>
+  </head>
+
+  <body>
+    <div class="topbar">
+      <div class="fill">
+        <div class="container">
+          <a class="brand" href="#">Humongous</a>
+          <ul class="nav">
+            <li class="active"><a href="#">Mongo</a></li>
+            <li><a data-controls-modal="credits" data-backdrop="true" keyboard="true">About</a></li>
+            <li><a data-controls-modal="license" data-backdrop="true" keyboard="true">License</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="content">
+        <div class="row">
+          <div class="span4">
+            <div class="databases">
+              <h3>Databases</h3>
+              <div class="database_list">
+                <table>
+                  <tbody>
+                    <% @databases.each do | db_name, size | %>
+                      <tr>
+                        <td><a href=<%= "/database/#{db_name}" %>><%= db_name %></a></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="collections">
+              <h3>Collections</h3>
+              <div class="collections_list">
+              </div>
+            </div>
+          </div>
+          <div class="span12">
+            <h3 class="header"><%= @header_string %></h3>
+            <div class="query_link"></div>
+            <div class="clear"></div>
+            <div class="yielder zebra-striped">
+              <table>
+                <tbody>
+                  <% @server_info.each do | property, value | %>
+                    <tr>
+                      <th><%= property %></th>
+                      <td><%= value %></td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="credits" style="display:none" class="modal hide fade">
+        <div class="modal-header">
+          <a href="#" class="close">x</a>
+          <h3>About Humongous</h3>
+        </div>
+        <div class="modal-body">
+          <div class="credits">
+            <h5>Author</h5>
+            <p>Bagwan Pankaj</p>
+          </div>
+          <div class="credits">
+            <h5>Version</h5>
+            <p><%= Humongous.version %></p>
+          </div>
+          <div class="credits">
+            <h5>Summary</h5>
+            <p><%= Humongous.summary %></p>
+          </div>
+          <div class="credits">
+            <h5>Description</h5>
+            <p><%= Humongous.description %></p>
+          </div>
+          <div class="credits">
+            <h5>Credits</h5>
+            <ul>
+              <li>MongoHub: For simplistic UI navigation experience</li>
+              <li>Twitter Bootstrap: Making a non designer do the designing simple.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="modal-footer"><span>&copy; Bagwan Pankaj 2012</span></div>
+      </div>
+      
+      <div id="license" style="display:none" class="modal hide fade">
+        <div class="modal-header">
+          <a href="#" class="close">x</a>
+          <h3>Humongous License</h3>
+        </div>
+        <div class="modal-body">
+          <p>Copyright (c) 2012 Bagwan Pankaj</p>
+          <p>
+            Permission is hereby granted, free of charge, to any person obtaining
+            a copy of this software and associated documentation files (the
+            "Software"), to deal in the Software without restriction, including
+            without limitation the rights to use, copy, modify, merge, publish,
+            distribute, sublicense, and/or sell copies of the Software, and to
+            permit persons to whom the Software is furnished to do so, subject to
+            the following conditions:
+          </p>
+          <p>
+            The above copyright notice and this permission notice shall be
+            included in all copies or substantial portions of the Software.
+          </p>
+          <p>
+            THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+            EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+            MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+            NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+            LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+            OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+            WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+          </p>
+        </div>
+        <div class="modal-footer"><span>&copy; Bagwan Pankaj 2012</span></div>
+      </div>
+
+      <footer>
+        <p>&copy; Bagwan Pankaj 2012</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+  </body>
+</html>
