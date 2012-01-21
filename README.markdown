@@ -25,7 +25,7 @@ Command line options:
 |:----------------------|--------------------------------------------------------------------:|
 | -K or --kill          | kill the running process and exit                                   |
 | -S, --status          | display the current running PID and URL then quit                   |
-| -s, --server SERVER   | Login credential(required for bitly)                                |
+| -s, --server SERVER   | serve using SERVER (thin/mongrel/webrick)                           |
 | -o, --host HOST       | listen on HOST (default: 0.0.0.0)                                   |
 | -p, --port PORT       | use PORT (default: 9000)                                            |
 | -x, --no-proxy        | ignore env proxy settings (e.g. http_proxy)                         |
@@ -56,7 +56,7 @@ There are lot of things and area to improve and develop. Since it in pre release
 * Better documentation
 * Example series
 
-## Contributing to shortly
+## Contributing to Humongous
  
 * Fork, branch, code, and then send me a pull request. :)
 
