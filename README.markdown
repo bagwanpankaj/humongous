@@ -4,35 +4,22 @@ Humongous: A Ruby way to browse and maintain MongoDB instances, using HTML5.
 
 ## Installation
 
-create a dependency in your Gemfile
-
-    gem 'humongous'
-
-then run
-
-    bundle install
-
-and humongous will be up and running. or 
-
-    gem install humongous
-
-in IRB
-
-just require it by running
-
-    require 'humongous'
-
-and then run
-
-    Humongous.run!
-
 #### Command Line Utility
 
-Humongous provides command line utility. Here is example how to use.
+Install the gem by running:
 
-on console/terminal run
+    gem install humongous --pre
+
+and run on terminal/console
 
     humongous
+
+And you are good to go it will open this in a browser or you can navigate it on port [9000](http://0.0.0.0:9000)
+to stope the server run the command again with -K option
+
+    humongous -K
+
+Command line options:
 
 | **Options**           | **What value do they take**                                         |
 |:----------------------|--------------------------------------------------------------------:|
@@ -40,13 +27,14 @@ on console/terminal run
 | -S, --status          | display the current running PID and URL then quit                   |
 | -s, --server SERVER   | Login credential(required for bitly)                                |
 | -o, --host HOST       | listen on HOST (default: 0.0.0.0)                                   |
-| -p, --port PORT       | use PORT (default: 5678)                                            |
+| -p, --port PORT       | use PORT (default: 9000)                                            |
 | -x, --no-proxy        | ignore env proxy settings (e.g. http_proxy)                         |
 | -F, --foreground      | don't daemonize, run in the foreground                              |
 | -L, --no-launch       | don't launch the browser                                            |
 | -d, --debug           | raise the log level to :debug (default: :info)                      |
-| --app-dir APP_DIR     | set the app dir where files are stored                              |
+| --app-dir APP_DIR     | set the app dir where files are stored("~/.humongous")              |
 | -h, --help            | Show this message                                                   |
+
 
 ## Credits
 
@@ -57,8 +45,6 @@ on console/terminal run
 For detailed info visit my blog [http://BagwanPankaj.com](http://bagwanpankaj.com)
 
 For more info write me at me[at]bagwanpankaj.com
-
-Copyright (c) 2010 Bagwan Pankaj: http://bagwanpankaj.com, released under the MIT license
 
 ## TODO's
 
