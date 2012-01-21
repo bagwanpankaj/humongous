@@ -1,0 +1,9 @@
+source 'http://rubygems.org'
+
+gem "sinatra", :require => "sinatra/base"
+gem "bson_ext"
+gem "mongo"
+gem "json"
+gem "crack"
+gem "thin"
+gem "rack"

@@ -56,7 +56,7 @@
                   <tbody>
                     <% @databases.each do | db_name, size | %>
                       <tr>
-                        <td><a href=<%= "/database/#{db_name}" %>><%= db_name %></a></td>
+                        <td data-source=<%= "/database/#{db_name}" %>><%= db_name %></td>
                       </tr>
                     <% end %>
                   </tbody>

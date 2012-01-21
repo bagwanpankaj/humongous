@@ -6,9 +6,7 @@ module Humongous
       username: "",
       password: ""
     }
-
-    set :port, 9494
-
+    
     dir = File.dirname(File.expand_path(__FILE__))
 
     set :views,  "#{dir}/views"
@@ -22,11 +20,25 @@ module Humongous
     set :static, true
 
     before do
-      begin
-        @connection = Mongo::Connection.from_uri(get_uri)
-      rescue Mongo::ConnectionFailure => e
-        @is_live = false
+      @connection = Mongo::Connection.from_uri(get_uri)
+    end
+
+    error Mongo::ConnectionFailure do
+      [502, headers, "Humongous is unable to find MongoDB instance. Check your MongoDB connection."]
+    end
+
+    helpers do
+
+      def get_uri(params = {})
+        @options = DEFAULT_OPTIONS
+        @options = @options.merge(params)
+        unless @options[:username].empty? && @options[:password].empty?
+          "mongodb://#{@options[:username]}:#{@options[:password]}@#{@options[:url]}:#{@options[:port]}"
+        else
+          "mongodb://#{@options[:url]}:#{@options[:port]}"
+        end
       end
+
     end
 
     get '/' do
@@ -42,7 +54,7 @@ module Humongous
       content_type :json
       { collections: @database.collection_names, stats: @database.stats, header: @header_string }.to_json
     end
-    
+
     get "/database/:db_name/collection/:collection_name" do
       @database = @connection.db(params[:db_name])
       @collection = @database.collection(params[:collection_name])
@@ -70,11 +82,7 @@ module Humongous
       content_type :json
       @records.to_json
     end
-    
-    get "/connection_failed" do
-      "<h1>Your Mongo Instance does not seems to be running</h1>"
-    end
-    
+
     post "/database/:db_name/collection/:collection_name/save" do
       @database = @connection.db(params[:db_name])
       @collection = @database.collection(params[:collection_name])
@@ -84,20 +92,6 @@ module Humongous
       { status: "OK", saved: true }.to_json
     end
     
-    private
-    
-    def load_defaults
-      
-    end
-    
-    def get_uri(params = {})
-      @options = DEFAULT_OPTIONS
-      @options = @options.merge(params)
-      unless @options[:username].empty? && @options[:password].empty?
-        "mongodb://#{@options[:username]}:#{@options[:password]}@#{@options[:url]}:#{@options[:port]}"
-      else
-        "mongodb://#{@options[:url]}:#{@options[:port]}"
-      end
-    end
   end
+
 end
