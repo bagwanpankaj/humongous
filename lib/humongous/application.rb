@@ -79,6 +79,10 @@ module Humongous
         options
       end
 
+      def default_opts
+        { skip: 0, limit: 10 }
+      end
+
     end
 
     get '/' do
@@ -131,7 +135,17 @@ module Humongous
       content_type :json
       { status: "OK", saved: true }.to_json
     end
-    
+
+    delete "/database/:db_name" do
+      content_type :json
+      @connection.drop_database(params[:db_name]).to_json
+    end
+
+    post "/database" do
+      p params
+      {}
+    end
+
   end
 
 end

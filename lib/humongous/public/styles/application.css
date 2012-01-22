@@ -87,3 +87,21 @@ tr.active{
   border-color: #0064cd #0064cd #003f81;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
+#loader{
+  top:70%;
+  left:60%;
+  width: 300px;
+  text-align: center;
+}
+#loader img{
+  height: 150px;
+  width: 150px;
+}
+.sidebar-header h3{
+  float:left;
+}
+.sidebar-header .add_remove{
+  padding-top: 10px;
+  float: right;
+  line-height: 26px;
+}
