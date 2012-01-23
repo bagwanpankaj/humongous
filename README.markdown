@@ -46,6 +46,10 @@ For detailed info visit my blog [http://BagwanPankaj.com](http://bagwanpankaj.co
 
 For more info write me at me[at]bagwanpankaj.com
 
+## Support
+
+Currently it only supports Ruby version >= 1.9.2
+
 ## TODO's
 
 There are lot of things and area to improve and develop. Since it in pre release now, any bug report, issues and feature request is highly appreciated.
