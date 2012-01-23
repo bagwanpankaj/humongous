@@ -38,6 +38,46 @@ module Humongous
           "mongodb://#{@options[:url]}:#{@options[:port]}"
         end
       end
+      
+      def default_opts
+        { skip: 0, limit: 10 }
+      end
+      
+      def to_bson( options )
+        ids = options.keys.grep /_id$/
+        ids.each do |id|
+          begin
+            options[id] = BSON::ObjectId.from_string(options[id])
+          rescue BSON::InvalidObjectId
+            puts "found illegal ObjectId, skipping..."
+            next
+          rescue e
+            puts e.message
+          end
+        end
+        options
+      end
+      
+      def doc_to_bson( doc, converter )
+        doc = send(converter, doc)
+        doc.each do |k,v|
+          case v
+          when Hash
+            send(converter, v )
+          # else
+          #   b[v]
+          end
+        end
+        doc
+      end
+      
+      def from_bson( options )
+        ids = options.each_pair.select{|k,v| v.is_a? BSON::ObjectId}
+        ids.each do |id|
+          options[id[0]] = id[1].to_s
+        end
+        options
+      end
 
     end
 
@@ -63,22 +103,20 @@ module Humongous
     end
 
     post "/database/:db_name/collection/:collection_name/page/:page" do
-      default_options = { skip: 0, limit: 10 }
-      default_query_options = {}
-      optionss = {}
+      selector = {}
+      opts = {}
       query = Crack::JSON.parse(params[:query])
-      query_options = default_query_options.merge(query) if !!query
-      optionss[:fields] = params[:fields].split(",").collect(&:strip) unless params[:fields].empty?
-      optionss[:skip] = params[:skip].to_i
-      optionss[:sort] = Crack::JSON.parse(params[:sort])
-      optionss[:limit] = params[:limit].to_i
-      optionss = default_options.merge(optionss)
+      query["_id"] = BSON::ObjectId.from_string(query["_id"]) if query && !!query["_id"]
+      selector = selector.merge(query) if !!query
+      opts[:fields] = params[:fields].split(",").collect(&:strip) unless params[:fields].empty?
+      opts[:skip] = params[:skip].to_i
+      opts[:sort] = Crack::JSON.parse(params[:sort])
+      opts[:limit] = params[:limit].to_i
+      opts = default_opts.merge(opts)
       @database = @connection.db(params[:db_name])
       @collection = @database.collection(params[:collection_name])
-      @records = @collection.find(query_options,optionss).to_a
-      @records.each do |record|
-        record["_id"] = record["_id"].to_s
-      end
+      @records = @collection.find(selector,opts).to_a
+      @records = @records.collect{|record| doc_to_bson(record, :from_bson) }
       content_type :json
       @records.to_json
     end
@@ -87,8 +125,10 @@ module Humongous
       @database = @connection.db(params[:db_name])
       @collection = @database.collection(params[:collection_name])
       doc = params[:doc]
-      doc["_id"] = BSON::ObjectId.from_string(doc["_id"])
-      @collection.save(params[:doc])
+      doc = doc_to_bson(doc, :to_bson)
+      # doc["_id"] = BSON::ObjectId.from_string(doc["_id"])
+      @collection.save(doc)
+      content_type :json
       { status: "OK", saved: true }.to_json
     end
     
