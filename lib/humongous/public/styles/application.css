@@ -105,3 +105,7 @@ tr.active{
   float: right;
   line-height: 26px;
 }
+a:hover{
+  text-decoration: none;
+  cursor: pointer;
+}

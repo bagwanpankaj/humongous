@@ -106,6 +106,14 @@ module Humongous
       { stats: @collection.stats, header: "Collection #{@database.name}.#{@collection.name} (#{@collection.stats.count}) stats" }.to_json
     end
 
+    delete "/database/:db_name/collection/:collection_name" do
+      @database = @connection.db(params[:db_name])
+      if @database.drop_collection(params[:collection_name])
+        content_type :json
+        { status: "OK", dropped: true }.to_json
+      end
+    end
+
     post "/database/:db_name/collection/:collection_name/page/:page" do
       selector = {}
       opts = {}
@@ -142,8 +150,13 @@ module Humongous
     end
 
     post "/database" do
-      p params
-      {}
+      @connection.db(params["database_name"]).create_collection("test");
+      { status: "OK", created: true, name: params["database_name"] }.to_json
+    end
+
+    post "/database/:database_name/collection" do
+      @connection.db(params["database_name"]).create_collection(params[:collection_name]);
+      { status: "OK", created: true, name: params["collection_name"] }.to_json
     end
 
   end

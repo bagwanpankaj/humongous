@@ -7,6 +7,7 @@ require "mongo"
 require "json"
 require "crack"
 require 'humongous/application'
+require 'humongous/version'
 
 module Humongous
 
@@ -16,7 +17,7 @@ module Humongous
 
   #gem version
   def self.version #:nodoc
-    File.read(File.join(File.dirname(__FILE__), '..', 'VERSION'))
+    Humongous::VERSION
   end
   
   def self.description
