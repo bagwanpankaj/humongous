@@ -8,7 +8,7 @@ set :logging, false
 describe 'Humongous' do
 
   describe "misc" do
-    it{ Humongous.version.should ==  File.read(File.join(File.dirname(__FILE__), '..', 'VERSION')) }
+    it{ Humongous.version.should ==  Humongous::VERSION }
     
     it "should return proper description" do
       Humongous.description.should include("Humongous: A Ruby way to browse and maintain mongo instance. Using HTML5.")
