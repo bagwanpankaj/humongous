@@ -1,0 +1,16 @@
+## v0.1.6.pre
+
+*ruby*
+
+* Added Authentication module.
+* Better Error Handling for known errors
+* Added Monkey patched to make my life easier.
+
+*js*
+
+* added 403 handling in ajax root.
+* validation for authentication module.
+
+*MISC*
+
+* updated README

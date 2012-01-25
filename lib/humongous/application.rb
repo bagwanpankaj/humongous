@@ -1,4 +1,8 @@
+# require './monkey_patch'
 module Humongous
+
+  MonkeyPatch.activate!
+
   class Application < Sinatra::Base
     DEFAULT_OPTIONS = {
       url: "localhost",
@@ -6,7 +10,9 @@ module Humongous
       username: "",
       password: ""
     }
-    
+
+    use Rack::Session::Pool, :expire_after => 2592000
+
     dir = File.dirname(File.expand_path(__FILE__))
 
     set :views,  "#{dir}/views"
@@ -20,14 +26,41 @@ module Humongous
     set :static, true
 
     before do
-      @connection = Mongo::Connection.from_uri(get_uri)
+      @connection = connection(params)
+      autanticate!
     end
 
     error Mongo::ConnectionFailure do
       [502, headers, "Humongous is unable to find MongoDB instance. Check your MongoDB connection."]
     end
 
+    error Mongo::OperationFailure do
+      halt 401, {'Content-Type' => 'text/javascript'}, { :errmsg => "Need to login", :ok => false }.to_json
+    end
+
     helpers do
+
+      def connection(params)
+        opts = opts_to_connect(params)
+        session[:connection] ||= Mongo::Connection.new(opts[:url], opts[:port])
+      end
+
+      def autanticate!
+        @connection.apply_saved_authentication and return unless @connection.auths.blank?
+        return if params[:auth].blank?
+        @connection.add_auth(params[:auth][:db], params[:auth][:username], params[:auth][:password])
+        @connection.apply_saved_authentication
+      end
+
+      def opts_to_connect(params = {})
+        return @options if @options && @options[:freeze]
+        @options = DEFAULT_OPTIONS
+        return @options if params.blank?
+        @options[:url] = params[:url]
+        @options[:port] = params[:port]
+        @options[:freeze] = true
+        @options
+      end
 
       def get_uri(params = {})
         @options = DEFAULT_OPTIONS
@@ -64,8 +97,6 @@ module Humongous
           case v
           when Hash
             send(converter, v )
-          # else
-          #   b[v]
           end
         end
         doc
@@ -79,18 +110,24 @@ module Humongous
         options
       end
 
-      def default_opts
-        { skip: 0, limit: 10 }
-      end
-
     end
 
-    get '/' do
-      @databases = @connection.database_info
-      @server_info = @connection.server_info
-      @header_string = "Server #{@connection.host}:#{@connection.port} stats"
+    reciever = lambda do
+      begin
+        @databases = @connection.database_info
+        @server_info = @connection.server_info
+        @header_string = "Server #{@connection.host}:#{@connection.port} stats"
+      rescue Mongo::OperationFailure => e
+        @databases = []
+        @server_info = { :errmsg => "Need to login", :ok => false }
+        @header_string = "Server #{@connection.host}:#{@connection.port} stats"
+        @force_login = true
+      end
       erb :index
     end
+
+    get "/", &reciever
+    post "/", &reciever
 
     get "/database/:db_name" do
       @database = @connection.db(params[:db_name])

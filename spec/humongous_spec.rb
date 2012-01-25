@@ -28,7 +28,9 @@ describe 'Humongous' do
     end
   
     before(:all) do
-      @connection = Mongo::Connection.from_uri("mongodb://localhost:27017")
+      @connection = Mongo::Connection.new()#from_uri("mongodb://localhost:27017")
+      @connection.add_auth("admin", "admin", "admin")
+      @connection.apply_saved_authentication
       @database = @connection.db("humongous_test")
       @collection = @database.create_collection("local")
       @collection.insert({name: "test", age: 12})

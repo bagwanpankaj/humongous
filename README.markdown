@@ -54,8 +54,8 @@ Currently it only supports Ruby version >= 1.9.2
 
 There are lot of things and area to improve and develop. Since it in pre release now, any bug report, issues and feature request is highly appreciated.
 
-* Error Handling
-* Authentication module
+* -Error Handling-
+* -Authentication module-
 * Better UI (need a real contribution here)
 * Better documentation
 * Example series
