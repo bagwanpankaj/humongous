@@ -1,14 +1,14 @@
-# require './monkey_patch'
+require './monkey_patch'
 module Humongous
 
   MonkeyPatch.activate!
 
   class Application < Sinatra::Base
     DEFAULT_OPTIONS = {
-      url: "localhost",
-      port: "27017",
-      username: "",
-      password: ""
+      :url => "localhost",
+      :port => "27017",
+      :username => "",
+      :password => ""
     }
 
     use Rack::Session::Pool, :expire_after => 2592000
@@ -73,7 +73,7 @@ module Humongous
       end
       
       def default_opts
-        { skip: 0, limit: 10 }
+        { :skip => 0, :limit => 10 }
       end
       
       def to_bson( options )
@@ -103,9 +103,9 @@ module Humongous
       end
       
       def from_bson( options )
-        ids = options.each_pair.select{|k,v| v.is_a? BSON::ObjectId}
-        ids.each do |id|
-          options[id[0]] = id[1].to_s
+        ids = options.select{ |k,v| v.is_a? BSON::ObjectId }
+        ids.each do | k, v |
+          options[k] = v.to_s
         end
         options
       end
@@ -133,21 +133,21 @@ module Humongous
       @database = @connection.db(params[:db_name])
       @header_string = "Database #{@database.name} (#{@database.collection_names.size}) stats"
       content_type :json
-      { collections: @database.collection_names, stats: @database.stats, header: @header_string }.to_json
+      { :collections => @database.collection_names, :stats => @database.stats, :header => @header_string }.to_json
     end
 
     get "/database/:db_name/collection/:collection_name" do
       @database = @connection.db(params[:db_name])
       @collection = @database.collection(params[:collection_name])
       content_type :json
-      { stats: @collection.stats, header: "Collection #{@database.name}.#{@collection.name} (#{@collection.stats.count}) stats" }.to_json
+      { :stats => @collection.stats, :header => "Collection #{@database.name}.#{@collection.name} (#{@collection.stats.count}) stats" }.to_json
     end
 
     delete "/database/:db_name/collection/:collection_name" do
       @database = @connection.db(params[:db_name])
       if @database.drop_collection(params[:collection_name])
         content_type :json
-        { status: "OK", dropped: true }.to_json
+        { :status => "OK", :dropped => true }.to_json
       end
     end
 
@@ -178,7 +178,7 @@ module Humongous
       # doc["_id"] = BSON::ObjectId.from_string(doc["_id"])
       @collection.save(doc)
       content_type :json
-      { status: "OK", saved: true }.to_json
+      { :status => "OK", :saved => true }.to_json
     end
 
     delete "/database/:db_name" do
@@ -188,12 +188,12 @@ module Humongous
 
     post "/database" do
       @connection.db(params["database_name"]).create_collection("test");
-      { status: "OK", created: true, name: params["database_name"] }.to_json
+      { :status => "OK", :created => true, :name => params["database_name"] }.to_json
     end
 
     post "/database/:database_name/collection" do
       @connection.db(params["database_name"]).create_collection(params[:collection_name]);
-      { status: "OK", created: true, name: params["collection_name"] }.to_json
+      { :status => "OK", :created => true, :name => params["collection_name"] }.to_json
     end
 
   end
