@@ -42,7 +42,7 @@ Command line options:
 
 ## More Info
 
-For detailed info visit my blog [http://BagwanPankaj.com](http://bagwanpankaj.com)
+For detailed info visit my blog [http://BagwanPankaj.com](http://bagwanpankaj.com) and/or [http://github.bagwanpankaj.com/humongous/](http://github.bagwanpankaj.com/humongous/)
 
 For more info write me at me[at]bagwanpankaj.com
 
@@ -54,8 +54,8 @@ Currently it only supports Ruby version >= 1.9.2
 
 There are lot of things and area to improve and develop. Since it in pre release now, any bug report, issues and feature request is highly appreciated.
 
-* -Error Handling-
-* -Authentication module-
+* Error Handling [DONE]
+* Authentication module [DONE]
 * Better UI (need a real contribution here)
 * Better documentation
 * Example series
