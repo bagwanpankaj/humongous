@@ -33,8 +33,8 @@ describe 'Humongous' do
       @connection.apply_saved_authentication
       @database = @connection.db("humongous_test")
       @collection = @database.create_collection("local")
-      @collection.insert({name: "test", age: 12})
-      @doc = @collection.find_one({name: "test"})
+      @collection.insert({:name => "test", :age => 12})
+      @doc = @collection.find_one({:name => "test"})
     end
   
     describe "Connection" do
@@ -116,7 +116,7 @@ describe 'Humongous' do
       describe "update" do
         before(:all) do
           @doc["name"] = "test_changed"
-          post "/database/humongous_test/collection/local/save", { doc: @doc }
+          post "/database/humongous_test/collection/local/save", { :doc => @doc }
           @parsed_body = Crack::JSON.parse(last_response.body)
         end
       
@@ -135,8 +135,8 @@ describe 'Humongous' do
     describe "Collection Query" do
     
       before(:all) do
-        @doc = @collection.insert({name: "test", age: 12})
-        post "/database/humongous_test/collection/local/page/1", { query: "{ \"name\": \"test\" }", fields: "", skip: 0, limit: 10, sort: "[]" }
+        @doc = @collection.insert({:name => "test", :age => 12})
+        post "/database/humongous_test/collection/local/page/1", { :query => "{ \"name\": \"test\" }", :fields => "", :skip => 0, :limit => 10, :sort => "[]" }
         @parsed_body = Crack::JSON.parse(last_response.body)
       end
     
