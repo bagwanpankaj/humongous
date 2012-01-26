@@ -1,4 +1,4 @@
-# require './monkey_patch'
+require './monkey_patch'
 module Humongous
 
   MonkeyPatch.activate!
@@ -188,14 +188,44 @@ module Humongous
 
     post "/database" do
       @connection.db(params["database_name"]).create_collection("test");
+      content_type :json
       { :status => "OK", :created => true, :name => params["database_name"] }.to_json
     end
 
     post "/database/:database_name/collection" do
       @connection.db(params["database_name"]).create_collection(params[:collection_name]);
+      content_type :json
       { :status => "OK", :created => true, :name => params["collection_name"] }.to_json
     end
 
+    delete "/database/:database_name/collection/:collection_name/remove" do
+      selector = {}
+      opts = {}
+      query = Crack::JSON.parse(params[:remove_query])
+      selector = selector.merge(query) if !!query
+      @database = @connection.db(params["database_name"])
+      @collection = @database.collection(params["collection_name"])
+      content_type :json
+      { :removed => @collection.remove( selector, opts ), :status => "OK" }.to_json
+    end
+
+  end
+
+  #gem version
+  def self.version #:nodoc
+    "Humongous::VERSION"
+  end
+  
+  def self.description
+    %Q{
+      Humongous: A Ruby way to browse and maintain mongo instance. Using HTML5.
+      This is beta version, So there is long way to go, but still you can enjoy its 
+      simplistic design.
+    }
+  end
+
+  def self.summary
+    %Q{An standalone Mongo Browser for Ruby. Just run and forget.}
   end
 
 end
