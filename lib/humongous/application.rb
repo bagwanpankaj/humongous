@@ -1,9 +1,13 @@
-require './monkey_patch'
+# require './monkey_patch'
+# Top level namespace for Humongous
 module Humongous
 
   MonkeyPatch.activate!
 
+  # Top namespace for Sinatra application. Serves backends
   class Application < Sinatra::Base
+    
+    #Default options to be used in absence of options provided to bootstrap application
     DEFAULT_OPTIONS = {
       :url => "localhost",
       :port => "27017",
@@ -30,21 +34,25 @@ module Humongous
       autanticate!
     end
 
+    # Error handler for cannection failure.
     error Mongo::ConnectionFailure do
       [502, headers, "Humongous is unable to find MongoDB instance. Check your MongoDB connection."]
     end
 
+    #Error handler to handle operation failures
     error Mongo::OperationFailure do
       halt 401, {'Content-Type' => 'text/javascript'}, { :errmsg => "Need to login", :ok => false }.to_json
     end
 
     helpers do
 
+      # Establishes a connection to mongo db and persist it through server side session
       def connection(params)
         opts = opts_to_connect(params)
         session[:connection] ||= Mongo::Connection.new(opts[:url], opts[:port])
       end
 
+      # Attempts to authanticate with with provided/saved auths
       def autanticate!
         @connection.apply_saved_authentication and return unless @connection.auths.blank?
         return if params[:auth].blank?
@@ -52,6 +60,7 @@ module Humongous
         @connection.apply_saved_authentication
       end
 
+      # returns options for mongo connection
       def opts_to_connect(params = {})
         return @options if @options && @options[:freeze]
         @options = DEFAULT_OPTIONS
@@ -62,6 +71,7 @@ module Humongous
         @options
       end
 
+      #Get mongodb uri for specified mongo server
       def get_uri(params = {})
         @options = DEFAULT_OPTIONS
         @options = @options.merge(params)
@@ -71,12 +81,14 @@ module Humongous
           "mongodb://#{@options[:url]}:#{@options[:port]}"
         end
       end
-      
+
+      # default options for querying
       def default_opts
         { :skip => 0, :limit => 10 }
       end
-      
-      def to_bson( options )
+
+      # converts BSON object from bson to back BSON
+      def to_bson( options ) #:nodoc
         ids = options.keys.grep /_id$/
         ids.each do |id|
           begin
@@ -91,7 +103,8 @@ module Humongous
         options
       end
       
-      def doc_to_bson( doc, converter )
+      #Iterates over docs and converts it to specified format
+      def doc_to_bson( doc, converter ) #:nodoc
         doc = send(converter, doc)
         doc.each do |k,v|
           case v
@@ -102,7 +115,7 @@ module Humongous
         doc
       end
       
-      def from_bson( options )
+      def from_bson( options ) #:nodoc
         ids = options.select{ |k,v| v.is_a? BSON::ObjectId }
         ids.each do | k, v |
           options[k] = v.to_s
@@ -209,23 +222,6 @@ module Humongous
       { :removed => @collection.remove( selector, opts ), :status => "OK" }.to_json
     end
 
-  end
-
-  #gem version
-  def self.version #:nodoc
-    "Humongous::VERSION"
-  end
-  
-  def self.description
-    %Q{
-      Humongous: A Ruby way to browse and maintain mongo instance. Using HTML5.
-      This is beta version, So there is long way to go, but still you can enjoy its 
-      simplistic design.
-    }
-  end
-
-  def self.summary
-    %Q{An standalone Mongo Browser for Ruby. Just run and forget.}
   end
 
 end
