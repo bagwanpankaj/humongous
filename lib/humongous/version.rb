@@ -1,3 +1,3 @@
 module Humongous
-  VERSION = "0.1.7.beta"
+  VERSION = "0.1.8.beta"
 end
