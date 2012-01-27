@@ -15,7 +15,7 @@ and run on terminal/console
     humongous
 
 And you are good to go it will open this in a browser or you can navigate it on port [9000](http://0.0.0.0:9000)
-to stope the server run the command again with -K option
+to stop the server run the command again with -K option
 
     humongous -K
 

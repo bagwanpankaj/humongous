@@ -1,4 +1,3 @@
-# require './monkey_patch'
 module Humongous
 
   MonkeyPatch.activate!
@@ -214,6 +213,14 @@ module Humongous
       @collection = @database.collection(params["collection_name"])
       content_type :json
       { :removed => @collection.remove( selector, opts ), :status => "OK" }.to_json
+    end
+    
+    post "/database/:database_name/collection/:collection_name/insert" do
+      @database = @connection.db(params[:database_name])
+      @collection = @database.collection(params[:collection_name])
+      doc = JSON.parse(json_converter(params[:doc])) if doc.present?
+      content_type :json
+      { :created => true, :id => @collection.insert(doc), :status => "OK" }.to_json
     end
 
   end

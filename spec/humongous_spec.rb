@@ -180,6 +180,75 @@ describe 'Humongous' do
         @parsed_body["name"].should == "humongous_test_create"
       end
     end
+    
+    describe "Delete" do
+      before(:all) do
+        delete "/database/humongous_test/collection/humongous_test_create"
+        @parsed_body = JSON.parse(last_response.body)
+      end
+      
+      it "should give proper response" do
+        last_response.should be_ok
+        last_response.headers["Content-Type"].should == "application/json;charset=utf-8"
+      end
+  
+      it "should contain proper key in json response" do
+        @parsed_body.keys.should include("status")
+        @parsed_body.keys.should include("dropped")
+      end
+  
+      it "should contain expected results" do
+        @parsed_body["status"].should include("OK")
+        @parsed_body["dropped"].should == true
+      end
+    end
+    
+    describe "Create a Record" do
+      before(:all) do
+        post "/database/humongous_test/collection/local/insert", { :doc => "{\"name\" : \"humongous\", \"age\": \"42\" }" }
+        @parsed_body = JSON.parse(last_response.body)
+      end
+      
+      it "should give proper response" do
+        { :created => true, :id => @collection.insert(doc), :status => "OK" }.to_json
+        last_response.should be_ok
+        last_response.headers["Content-Type"].should == "application/json;charset=utf-8"
+      end
+  
+      it "should contain proper key in json response" do
+        @parsed_body.keys.should include("created")
+        @parsed_body.keys.should include("id")
+        @parsed_body.keys.should include("status")
+      end
+  
+      it "should contain expected results" do
+        @parsed_body["status"].should include("OK")
+        @parsed_body["id"].should == true
+        @parsed_body["id"].should be_an_instance_of BSON::ObjectId
+      end
+    end
+    
+    describe "Delete a Record" do
+      before(:all) do
+        delete "/database/humongous_test/collection/test/remove", { :remove_query => "" }
+        @parsed_body = JSON.parse(last_response.body)
+      end
+      
+      it "should give proper response" do
+        last_response.should be_ok
+        last_response.headers["Content-Type"].should == "application/json;charset=utf-8"
+      end
+  
+      it "should contain proper key in json response" do
+        @parsed_body.keys.should include("status")
+        @parsed_body.keys.should include("dropped")
+      end
+  
+      it "should contain expected results" do
+        @parsed_body["status"].should include("OK")
+        @parsed_body["dropped"].should == true
+      end
+    end
   
     describe "Collection Query" do
     
