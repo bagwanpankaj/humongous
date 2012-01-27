@@ -48,7 +48,7 @@ For more info write me at me[at]bagwanpankaj.com
 
 ## Support
 
-Currently it only supports Ruby version >= 1.9.2
+Currently it only supports Ruby version >= 1.8.7. Humongous has been tested on MRI 18, MRI 19 and JRuby.
 
 ## TODO's
 
@@ -56,6 +56,7 @@ There are lot of things and area to improve and develop. Since it in pre release
 
 * Error Handling [DONE]
 * Authentication module [DONE]
+* Sophisticated Querying support [In Progress]
 * Better UI (need a real contribution here) [In Progress]
 * Better documentation
 * Example series

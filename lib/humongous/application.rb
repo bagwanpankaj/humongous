@@ -1,4 +1,4 @@
-require './monkey_patch'
+# require './monkey_patch'
 module Humongous
 
   MonkeyPatch.activate!

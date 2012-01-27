@@ -133,7 +133,7 @@ describe 'Humongous' do
     
         it "should contain expected results" do
           @parsed_body["header"].should include("Collection humongous_test.local")
-          @parsed_body["stats"].should == @collection.stats
+          @parsed_body["stats"].should == JSON.parse(@collection.stats.to_json)
         end
       end
     
