@@ -217,11 +217,16 @@ module Humongous
     end
     
     post "/database/:database_name/collection/:collection_name/insert" do
+      created = false
       @database = @connection.db(params[:database_name])
       @collection = @database.collection(params[:collection_name])
-      doc = JSON.parse(json_converter(params[:doc])) if params[:doc].present?
+      if params[:doc].present?
+        doc = JSON.parse(json_converter(params[:doc]))
+        @collection.insert(doc)
+        created = true
+      end
       content_type :json
-      { :created => true, :id => @collection.insert(doc).to_s, :status => "OK" }.to_json
+      { :created => created, :id => true, :status => "OK" }.to_json
     end
 
   end
