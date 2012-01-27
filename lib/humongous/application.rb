@@ -1,3 +1,4 @@
+# require './monkey_patch'
 module Humongous
 
   MonkeyPatch.activate!
@@ -207,7 +208,7 @@ module Humongous
       selector = {}
       opts = {}
       query = JSON.parse(json_converter(params[:remove_query])) if params[:remove_query].present?
-      query["_id"] = BSON::ObjectId.from_string(query["_id"]) if query["_id"].present?
+      query["_id"] = BSON::ObjectId.from_string(query["_id"]) if query.present? && query["_id"].present?
       selector = selector.merge(query) if !!query
       @database = @connection.db(params["database_name"])
       @collection = @database.collection(params["collection_name"])
@@ -218,9 +219,9 @@ module Humongous
     post "/database/:database_name/collection/:collection_name/insert" do
       @database = @connection.db(params[:database_name])
       @collection = @database.collection(params[:collection_name])
-      doc = JSON.parse(json_converter(params[:doc])) if doc.present?
+      doc = JSON.parse(json_converter(params[:doc])) if params[:doc].present?
       content_type :json
-      { :created => true, :id => @collection.insert(doc), :status => "OK" }.to_json
+      { :created => true, :id => @collection.insert(doc).to_s, :status => "OK" }.to_json
     end
 
   end

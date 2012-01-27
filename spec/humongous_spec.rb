@@ -210,7 +210,6 @@ describe 'Humongous' do
       end
       
       it "should give proper response" do
-        { :created => true, :id => @collection.insert(doc), :status => "OK" }.to_json
         last_response.should be_ok
         last_response.headers["Content-Type"].should == "application/json;charset=utf-8"
       end
@@ -223,8 +222,7 @@ describe 'Humongous' do
   
       it "should contain expected results" do
         @parsed_body["status"].should include("OK")
-        @parsed_body["id"].should == true
-        @parsed_body["id"].should be_an_instance_of BSON::ObjectId
+        @parsed_body["id"].should be_an_instance_of String
       end
     end
     
@@ -238,15 +236,15 @@ describe 'Humongous' do
         last_response.should be_ok
         last_response.headers["Content-Type"].should == "application/json;charset=utf-8"
       end
-  
+      
       it "should contain proper key in json response" do
         @parsed_body.keys.should include("status")
-        @parsed_body.keys.should include("dropped")
+        @parsed_body.keys.should include("removed")
       end
-  
+      
       it "should contain expected results" do
         @parsed_body["status"].should include("OK")
-        @parsed_body["dropped"].should == true
+        @parsed_body["removed"].should == true
       end
     end
   
