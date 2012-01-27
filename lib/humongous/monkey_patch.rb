@@ -7,6 +7,10 @@ module Humongous
         self.respond_to?(:empty?) ? empty? : nil?
       end
       
+      def present?
+        !blank?
+      end
+      
       def self.activate!
         Object.send(:include, self)
       end

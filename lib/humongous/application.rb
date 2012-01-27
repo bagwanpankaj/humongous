@@ -109,6 +109,10 @@ module Humongous
         end
         options
       end
+      
+      def json_converter( params_json )
+        params_json.gsub(/(\w+):/, '"\1":')
+      end
 
     end
 
@@ -154,12 +158,14 @@ module Humongous
     post "/database/:db_name/collection/:collection_name/page/:page" do
       selector = {}
       opts = {}
-      query = Crack::JSON.parse(params[:query])
-      query["_id"] = BSON::ObjectId.from_string(query["_id"]) if query && !!query["_id"]
-      selector = selector.merge(query) if !!query
-      opts[:fields] = params[:fields].split(",").collect(&:strip) unless params[:fields].empty?
+      if params[:query].present?
+        query = JSON.parse(json_converter(params[:query]))
+        query["_id"] = BSON::ObjectId.from_string(query["_id"]) if query["_id"].present?
+        selector = selector.merge(query)
+      end
+      opts[:fields] = params[:fields].split(",").collect(&:strip) unless params[:fields].blank?
       opts[:skip] = params[:skip].to_i
-      opts[:sort] = Crack::JSON.parse(params[:sort])
+      opts[:sort] = JSON.parse(json_converter(params[:sort])) if params[:sort].present?
       opts[:limit] = params[:limit].to_i
       opts = default_opts.merge(opts)
       @database = @connection.db(params[:db_name])
@@ -201,7 +207,8 @@ module Humongous
     delete "/database/:database_name/collection/:collection_name/remove" do
       selector = {}
       opts = {}
-      query = Crack::JSON.parse(params[:remove_query])
+      query = JSON.parse(json_converter(params[:remove_query])) if params[:remove_query].present?
+      query["_id"] = BSON::ObjectId.from_string(query["_id"]) if query["_id"].present?
       selector = selector.merge(query) if !!query
       @database = @connection.db(params["database_name"])
       @collection = @database.collection(params["collection_name"])
@@ -209,23 +216,6 @@ module Humongous
       { :removed => @collection.remove( selector, opts ), :status => "OK" }.to_json
     end
 
-  end
-
-  #gem version
-  def self.version #:nodoc
-    "Humongous::VERSION"
-  end
-  
-  def self.description
-    %Q{
-      Humongous: A Ruby way to browse and maintain mongo instance. Using HTML5.
-      This is beta version, So there is long way to go, but still you can enjoy its 
-      simplistic design.
-    }
-  end
-
-  def self.summary
-    %Q{An standalone Mongo Browser for Ruby. Just run and forget.}
   end
 
 end

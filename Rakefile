@@ -11,22 +11,6 @@ rescue Bundler::BundlerError => e
 end
 require 'rake'
 
-require 'jeweler'
-Jeweler::Tasks.new do |gem|
-  # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "humongous"
-  gem.homepage = "http://github.com/bagwanpankaj/humongous"
-  gem.license = "MIT"
-  gem.summary = %Q{Humongous: A Mongo Browser for Ruby}
-  gem.description = %Q{Humongous: A Ruby way to browse and maintain mongo instance. Using HTML5.}
-  gem.email = "bagwanpankaj@gmail.com"
-  gem.authors = ["bagwanpankaj"]
-  # dependencies defined in Gemfile
-  gem.files = Dir['lib/**/**', 'VERSION', 'bin/**', 'LICENSE.txt']
-  gem.executables = ["humongous"]
-end
-Jeweler::RubygemsDotOrgTasks.new
-
 require 'rspec/core'
 require 'rspec/core/rake_task'
 RSpec::Core::RakeTask.new(:spec) do |spec|

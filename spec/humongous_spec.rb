@@ -50,7 +50,7 @@ describe 'Humongous' do
       describe "Show" do
         before(:all) do
           get '/database/humongous_test'
-          @parsed_body = Crack::JSON.parse(last_response.body)
+          @parsed_body = JSON.parse(last_response.body)
         end
     
         it "should give proper response" do
@@ -71,13 +71,37 @@ describe 'Humongous' do
         end
       end
 
+      describe "Create" do
+        before(:all) do
+          post '/database', {"database_name" => "humongo_test_create"}
+          @parsed_body = JSON.parse(last_response.body)
+        end
+    
+        it "should give proper response" do
+          last_response.should be_ok
+          last_response.headers["Content-Type"].should == "application/json;charset=utf-8"
+        end
+    
+        it "should contain proper key in json response" do
+          @parsed_body.keys.should include("status")
+          @parsed_body.keys.should include("created")
+          @parsed_body.keys.should include("name")
+        end
+    
+        it "should contain expected results" do
+          @parsed_body["status"].should include("OK")
+          @parsed_body["created"].should == true
+          @parsed_body["name"].should == "humongo_test_create"
+        end
+      end
+      
       describe "Delete" do
 
         before(:all) do
           @database = @connection.db("humongous_delete_test")
           @collection = @database.create_collection("local")
           delete "/database/humongous_delete_test"
-          @parsed_body = Crack::JSON.parse(last_response.body)
+          @parsed_body = JSON.parse(last_response.body)
         end
 
         it "should delete database" do
@@ -94,7 +118,7 @@ describe 'Humongous' do
       describe "Collection stats" do
         before(:all) do
           get "/database/humongous_test/collection/local"
-          @parsed_body = Crack::JSON.parse(last_response.body)
+          @parsed_body = JSON.parse(last_response.body)
         end
     
         it "should give proper response" do
@@ -117,7 +141,7 @@ describe 'Humongous' do
         before(:all) do
           @doc["name"] = "test_changed"
           post "/database/humongous_test/collection/local/save", { :doc => @doc }
-          @parsed_body = Crack::JSON.parse(last_response.body)
+          @parsed_body = JSON.parse(last_response.body)
         end
       
         it "should give proper response" do
@@ -131,13 +155,38 @@ describe 'Humongous' do
         end
       end
     end
+    
+    describe "Create" do
+      
+      before(:all) do
+        post "/database/humongous_test/collection", { :collection_name => "humongous_test_create" }
+        @parsed_body = JSON.parse(last_response.body)
+      end
+    
+      it "should give proper response" do
+        last_response.should be_ok
+        last_response.headers["Content-Type"].should == "application/json;charset=utf-8"
+      end
+  
+      it "should contain proper key in json response" do
+        @parsed_body.keys.should include("status")
+        @parsed_body.keys.should include("created")
+        @parsed_body.keys.should include("name")
+      end
+  
+      it "should contain expected results" do
+        @parsed_body["status"].should include("OK")
+        @parsed_body["created"].should == true
+        @parsed_body["name"].should == "humongous_test_create"
+      end
+    end
   
     describe "Collection Query" do
     
       before(:all) do
         @doc = @collection.insert({:name => "test", :age => 12})
         post "/database/humongous_test/collection/local/page/1", { :query => "{ \"name\": \"test\" }", :fields => "", :skip => 0, :limit => 10, :sort => "[]" }
-        @parsed_body = Crack::JSON.parse(last_response.body)
+        @parsed_body = JSON.parse(last_response.body)
       end
     
       it "should give proper response" do

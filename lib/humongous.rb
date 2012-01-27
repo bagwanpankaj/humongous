@@ -1,11 +1,7 @@
 require 'rubygems'
-# require 'bundler'
-# require "bundler/setup"
-
 require "sinatra/base"
 require "mongo"
 require "json"
-require "crack"
 require 'humongous/monkey_patch'
 require 'humongous/application'
 require 'humongous/version'
