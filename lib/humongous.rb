@@ -3,6 +3,7 @@ require "sinatra/base"
 require "mongo"
 require "json"
 require 'humongous/monkey_patch'
+require 'humongous/helpers'
 require 'humongous/application'
 require 'humongous/version'
 

@@ -1,4 +1,3 @@
-# require './monkey_patch'
 module Humongous
 
   MonkeyPatch.activate!
@@ -39,81 +38,7 @@ module Humongous
     end
 
     helpers do
-
-      def connection(params)
-        opts = opts_to_connect(params)
-        session[:connection] ||= Mongo::Connection.new(opts[:url], opts[:port])
-      end
-
-      def autanticate!
-        @connection.apply_saved_authentication and return unless @connection.auths.blank?
-        return if params[:auth].blank?
-        @connection.add_auth(params[:auth][:db], params[:auth][:username], params[:auth][:password])
-        @connection.apply_saved_authentication
-      end
-
-      def opts_to_connect(params = {})
-        return @options if @options && @options[:freeze]
-        @options = DEFAULT_OPTIONS
-        return @options if params.blank?
-        @options[:url] = params[:url]
-        @options[:port] = params[:port]
-        @options[:freeze] = true
-        @options
-      end
-
-      def get_uri(params = {})
-        @options = DEFAULT_OPTIONS
-        @options = @options.merge(params)
-        unless @options[:username].empty? && @options[:password].empty?
-          "mongodb://#{@options[:username]}:#{@options[:password]}@#{@options[:url]}:#{@options[:port]}"
-        else
-          "mongodb://#{@options[:url]}:#{@options[:port]}"
-        end
-      end
-      
-      def default_opts
-        { :skip => 0, :limit => 10 }
-      end
-      
-      def to_bson( options )
-        ids = options.keys.grep /_id$/
-        ids.each do |id|
-          begin
-            options[id] = BSON::ObjectId.from_string(options[id])
-          rescue BSON::InvalidObjectId
-            puts "found illegal ObjectId, skipping..."
-            next
-          rescue e
-            puts e.message
-          end
-        end
-        options
-      end
-      
-      def doc_to_bson( doc, converter )
-        doc = send(converter, doc)
-        doc.each do |k,v|
-          case v
-          when Hash
-            send(converter, v )
-          end
-        end
-        doc
-      end
-      
-      def from_bson( options )
-        ids = options.select{ |k,v| v.is_a? BSON::ObjectId }
-        ids.each do | k, v |
-          options[k] = v.to_s
-        end
-        options
-      end
-      
-      def json_converter( params_json )
-        params_json.gsub(/(\w+):/, '"\1":')
-      end
-
+      include Humongous::Helpers::SinatraHelpers
     end
 
     reciever = lambda do
@@ -227,6 +152,19 @@ module Humongous
       end
       content_type :json
       { :created => created, :id => true, :status => "OK" }.to_json
+    end
+    
+    post "/database/:database_name/collection/:collection_name/mapreduce" do
+      opts = { :out => { :inline => true }, :raw => true }
+      opts[:finalize] = params[:finalize] unless params[:finalize].blank?
+      opts[:out] = params[:out] unless params[:out].blank?
+      opts[:query] = JSON.parse(json_converter(params[:query])) unless params[:query].blank?
+      opts[:sort] = params[:sort] unless params[:sort].blank?
+      opts[:limit] = params[:limit] unless params[:limit].blank?
+      @database = @connection.db(params[:database_name])
+      @collection = @database.collection(params[:collection_name])
+      content_type :json
+      @collection.map_reduce( params[:map], params[:reduce], opts ).to_json
     end
 
   end

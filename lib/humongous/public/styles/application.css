@@ -55,10 +55,10 @@ body {
 label{
   width: auto;
 }
-.query_form, .sort_form, .skip_form, .fields_form, .limit_form, .submit_btn{
+.query_form, .sort_form, .skip_form, .fields_form, .limit_form, .submit_btn, .map_form, .reduce_form, .finalize_form, .out_form{
   float: left;
 }
-input{
+input, textarea{
   margin: 0px 10px 0px 5px;
   width: auto;
 }
