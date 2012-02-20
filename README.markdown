@@ -56,7 +56,7 @@ There are lot of things and area to improve and develop. Since it in pre release
 
 * Error Handling [DONE]
 * Authentication module [DONE]
-* Sophisticated Querying support [In Progress]
+* Sophisticated Querying support [DONE]
 * Better UI (need a real contribution here) [In Progress]
 * Better documentation
 * Example series
