@@ -222,7 +222,7 @@ describe 'Humongous' do
   
       it "should contain expected results" do
         @parsed_body["status"].should include("OK")
-        @parsed_body["id"].should be_an_instance_of String
+        @parsed_body["id"].should be_true
       end
     end
     
