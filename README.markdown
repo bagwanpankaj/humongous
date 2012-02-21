@@ -8,7 +8,7 @@ Humongous: A Ruby way to browse and maintain MongoDB instances, using HTML5.
 
 Install the gem by running:
 
-    gem install humongous --pre
+    gem install humongous
 
 and run on terminal/console
 
@@ -48,7 +48,7 @@ For more info write me at me[at]bagwanpankaj.com
 
 ## Support
 
-Currently it only supports Ruby version >= 1.8.7. Humongous has been tested on MRI 18, MRI 19 and JRuby.
+Currently it only supports Ruby version >= 1.8.7. Humongous has been tested against MRI 18, MRI 19 and JRuby.
 
 ## TODO's
 
