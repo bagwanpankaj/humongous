@@ -31,8 +31,10 @@ module Humongous
   end
 
   def self.run!
-    puts "Hi There, Welcome and thanks for using Humongous."
-    puts "Welcome aboard Humongous."
+    puts "#################################################"
+    puts "You are using Humongous(#{Humongous.version})"
+    puts "Welcome aboard on Humongous. Enjoy!"
+    puts "#################################################"
 
     Application.run!
   end

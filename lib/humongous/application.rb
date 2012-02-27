@@ -30,16 +30,14 @@ module Humongous
     end
 
     error Mongo::ConnectionFailure do
-      [502, headers, "Humongous is unable to find MongoDB instance. Check your MongoDB connection."]
+      halt 502, headers, "Humongous is unable to find MongoDB instance. Make sure that MongoDB is running."
     end
 
     error Mongo::OperationFailure do
       halt 401, {'Content-Type' => 'text/javascript'}, { :errmsg => "Need to login", :ok => false }.to_json
     end
 
-    helpers do
-      include Humongous::Helpers::SinatraHelpers
-    end
+    helpers { include Humongous::Helpers::SinatraHelpers }
 
     reciever = lambda do
       begin

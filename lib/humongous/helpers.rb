@@ -24,10 +24,7 @@ module Humongous
           :password => ""
         }
         return @options if params.blank?
-        @options[:url] = params[:url]
-        @options[:port] = params[:port]
-        @options[:freeze] = true
-        @options
+        @options.merge({ :url => params[:url], :port => params[:port], :freeze => true })
       end
 
       def get_uri(params = {})
