@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
+begin
+  require 'vegas'
+rescue LoadError
+  require 'rubygems'
+  require 'vegas'
+end  
+require 'humongous'
+
+Vegas::Runner.new(Humongous::Application, 'humongous',{
+  :environment => "production",
+  :app_dir => File.expand_path(File.join('~', '.humongous')),
+  :port => 9000,
+  :before_run => lambda {|v|
+    puts "#################################################"
+    puts "You are using Humongous(#{Humongous.version})"
+    puts "Welcome aboard on Humongous. Enjoy!"
+    puts "#################################################"
+  }
+})
