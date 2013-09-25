@@ -10,7 +10,7 @@ module Humongous
 
       def autanticate!
         @connection.apply_saved_authentication and return unless @connection.auths.blank?
-        return if params[:auth].collect{|_, v| v.blank?}.all?
+        return if params[:auth].blank? || params[:auth].collect{|_, v| v.blank?}.all?
         @connection.add_auth(params[:auth][:db], params[:auth][:username], params[:auth][:password])
         @connection.apply_saved_authentication
       end
@@ -83,6 +83,18 @@ module Humongous
       def json_converter( params_json )
         params_json.gsub(/(\w+):/, '"\1":')
       end
+
+      def logger
+        request.logger
+      end
+
+      def debug(message)
+        logger.info("[DEBUG] STARTS")
+        logger.info("\t[DUMP][PARAMS]#{params.inspect}")
+        logger.info("\t[DUMP] #{message}")
+        logger.info("[DEBUG] ENDS")
+      end
+      alias_method :d, :debug
       
     end
     

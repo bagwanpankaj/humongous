@@ -11,6 +11,6 @@ group :development do
   gem "rake"
   gem "rspec", "~> 2.3.0"
   gem "bundler"
-  gem "rcov", ">= 0"
+  # gem "rcov", ">= 0"
   gem "rack-test", :require => "rack/test"
 end

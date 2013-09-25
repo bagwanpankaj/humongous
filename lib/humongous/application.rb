@@ -11,6 +11,7 @@ module Humongous
     }
 
     use Rack::Session::Pool, :expire_after => 2592000
+    use Rack::Logger
 
     dir = File.dirname(File.expand_path(__FILE__))
 
@@ -25,9 +26,7 @@ module Humongous
     set :static, true
 
     before do
-      puts "\n\n\n"
-      p params
-      puts "\n\n\n"
+      d(nil)
       @connection = connection(params)
       autanticate!
     end
@@ -64,7 +63,17 @@ module Humongous
     end
     
     post "/" do
-      
+      begin
+        @databases = @connection.database_info
+        @server_info = @connection.server_info
+        @header_string = "Server #{@connection.host}:#{@connection.port} stats"
+      rescue Mongo::OperationFailure => e
+        @databases = []
+        @server_info = { :errmsg => "Need to login", :ok => false }
+        @header_string = "Server #{@connection.host}:#{@connection.port} stats"
+        @force_login = true
+      end
+      d("#{@databases.inspect}\n#{@server_info.inspect}")
     end
 
     get "/database/:db_name" do
