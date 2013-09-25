@@ -1,0 +1,49 @@
+!!! 5
+%html
+  %head
+    %meta{ 'charset' => "utf-8"  }
+    %meta{ "name" => "viewport",  "content" => "width=device-width, initial-scale=1.0" }
+    %meta{ "name" => "description",  "content" => "A MongoDB Browser" }
+    %meta{ "name" => "author",  "content" => "Bagwan Pankaj" }
+    
+    // <link rel="shortcut icon" href="../../assets/ico/favicon.png">
+    %title
+      Humongous: A MongoDB Browser
+
+    //Bootstrap core CSS
+    %link{ :href => "/styles/bootstrap.css", :rel => "stylesheet" }
+    %link{ :href => "/styles/navbar-fixed-top.css", :rel => "stylesheet" }
+    %link{ :href => "/styles/application.css", :rel => "stylesheet" }
+
+  %body
+    .navbar.navbar-default.navbar-fixed-top
+      .container
+        .navbar-header
+          %button{ :type => "button", :class => "navbar-toggle", :"data-toggle" => "collapse", :"data-target" => ".navbar-collapse"}
+            %span.icon-bar
+            %span.icon-bar
+            %span.icon-bar
+          %a.navbar-brand{ :href => "#" } Humongous
+        .navbar-collapse.collapse
+          %ul.nav.navbar-nav
+            %li.active
+              %a{ :href => "#" } Home
+            %li
+              %a{ :href => "#about" } About
+            %li
+              %a{ :href => "#contact" } Contact
+
+    .container
+      = haml :"_login"
+      / %form.form-signin
+      /   %h3.form-signin-heading
+      /     Connection
+      /   %input{ :type => "text", :class => "form-control", :placeholder => "Host (Default: localhost)", :autofocus => "autofocus", :name => "url"}
+      /   %input{ :type => "text", :class => "form-control", :placeholder => "Port (Default: 27017)", :name => "port" }
+      /   %input{ :type => "text", :class => "form-control", :placeholder => "Database", :name => "auth[db]" }
+      /   %input{ :type => "text", :class => "form-control", :placeholder => "Username", :name => "auth[username]" }
+      /   %input{ :type => "password", :class => "form-control", :placeholder => "Password", :name => "auth[password]" }
+      /   %label.checkbox
+      /     %input{ :type => "checkbox", :value => "remember-me" }
+      /       Remember Me
+      /   %input{ :type => "submit", :class => "btn btn-lg btn-primary btn-block", :value => "Connect" }

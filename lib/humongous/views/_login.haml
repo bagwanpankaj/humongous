@@ -1,0 +1,26 @@
+%form{:method => "post", :action => "/", :class => "login_form" }
+  %h3
+    Connect to Server
+  .input-group
+    %input{ :type => "text", :class => "form-control", :name => "url", :value => "localhost", :placeholder => "Host" }
+    %span.input-group-addon
+      Host
+  .input-group
+    %input{ :type => "text", :class => "form-control", :name => "port", :value => "27017", :placeholder => "Port" }
+    %span.input-group-addon
+      Port
+  .input-group
+    %input{ :type => "text", :class => "form-control", :name => "auth[db]", :placeholder => "Database" }
+    %span.input-group-addon
+      Database
+  .input-group
+    %input{ :type => "text", :class => "form-control", :name => "auth[username]", :placeholder => "Username" }
+    %span.input-group-addon
+      User
+      
+  .input-group
+    %input{ :type => "password", :class => "form-control", :name => "auth[password]", :placeholder => "Password" }
+    %span.input-group-addon
+      Password
+  .submit_button
+    %input{ :type => "submit", :value => "Connect", :class => "btn btn-primary" }

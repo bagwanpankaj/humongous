@@ -10,7 +10,7 @@ module Humongous
 
       def autanticate!
         @connection.apply_saved_authentication and return unless @connection.auths.blank?
-        return if params[:auth].blank?
+        return if params[:auth].collect{|_, v| v.blank?}.all?
         @connection.add_auth(params[:auth][:db], params[:auth][:username], params[:auth][:password])
         @connection.apply_saved_authentication
       end

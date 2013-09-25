@@ -25,6 +25,9 @@ module Humongous
     set :static, true
 
     before do
+      puts "\n\n\n"
+      p params
+      puts "\n\n\n"
       @connection = connection(params)
       autanticate!
     end
@@ -40,21 +43,29 @@ module Humongous
     helpers { include Humongous::Helpers::SinatraHelpers }
 
     reciever = lambda do
-      begin
-        @databases = @connection.database_info
-        @server_info = @connection.server_info
-        @header_string = "Server #{@connection.host}:#{@connection.port} stats"
-      rescue Mongo::OperationFailure => e
-        @databases = []
-        @server_info = { :errmsg => "Need to login", :ok => false }
-        @header_string = "Server #{@connection.host}:#{@connection.port} stats"
-        @force_login = true
-      end
-      erb :index
+      # begin
+      #   @databases = @connection.database_info
+      #   @server_info = @connection.server_info
+      #   @header_string = "Server #{@connection.host}:#{@connection.port} stats"
+      # rescue Mongo::OperationFailure => e
+      #   @databases = []
+      #   @server_info = { :errmsg => "Need to login", :ok => false }
+      #   @header_string = "Server #{@connection.host}:#{@connection.port} stats"
+      #   @force_login = true
+      # end
+      haml :index
     end
 
-    get "/", &reciever
-    post "/", &reciever
+    # get "/", &reciever
+    # post "/", &reciever
+    
+    get "/" do
+      haml :index
+    end
+    
+    post "/" do
+      
+    end
 
     get "/database/:db_name" do
       @database = @connection.db(params[:db_name])

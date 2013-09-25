@@ -1,0 +1,32 @@
+<div class="server_stat">
+  <table class="table table-striped">
+    <thead>
+      <th colspan="2"><%= @header_string %></th>
+    </thead>
+    <tbody>
+      <% @server_info.each do | property, value | %>
+        <tr>
+          <td><%= property %></th>
+          <td><%= value %></td>
+        </tr>
+      <% end %>
+      <tr>
+        <td>Databases</td>
+        <td>
+          <input type="text" style="width: 70%; float:left" data-provide="typeahead" data-source=<%= @databases.keys.to_json %>>
+          <div class="dropdown" style="float:left; padding:5px 5px 2px; border-left: solid #bbb 1px; margin-left: -25px">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+              <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+              <% @databases.keys.each do |db| %>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#"><%= db %></a></li>
+              <% end %>
+            </ul>
+          </div>
+          <div style="clear:both"></div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
