@@ -37,6 +37,14 @@ module Humongous
       halt 401, {'Content-Type' => 'text/javascript'}, { :errmsg => "Need to login", :ok => false }.to_json
     end
 
+    error Mongo::InvalidNSName do
+      halt 502, headers, "Humongous is unable to find MongoDB instance. Make sure that MongoDB is running."
+    end
+
+    error Mongo::AuthenticationError do
+      halt 502, headers, "Humongous is unable to find MongoDB instance. Make sure that MongoDB is running."
+    end
+
     helpers { include Humongous::Helpers::SinatraHelpers }
 
     reciever = lambda do

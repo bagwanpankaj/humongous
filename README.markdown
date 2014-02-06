@@ -67,5 +67,5 @@ There are lot of things and area to improve and develop. Since it in pre release
 
 ## Copyright
 
-Copyright (c) 2012 [Bagwan Pankaj]. See LICENSE.txt for further details.
+Copyright (c) 2012-2014 [Bagwan Pankaj]. See LICENSE.txt for further details.
 

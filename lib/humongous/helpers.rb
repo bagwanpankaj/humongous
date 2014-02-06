@@ -5,12 +5,12 @@ module Humongous
       
       def connection(params)
         opts = opts_to_connect(params)
-        session[:connection] ||= Mongo::Connection.new(opts[:url], opts[:port])
+        session[:connection] = Mongo::Connection.new(opts[:url], opts[:port])
       end
 
       def autanticate!
         @connection.apply_saved_authentication and return unless @connection.auths.blank?
-        return if params[:auth].blank?
+        return if params[:auth].blank? || params[:auth][:db].blank?
         @connection.add_auth(params[:auth][:db], params[:auth][:username], params[:auth][:password])
         @connection.apply_saved_authentication
       end
@@ -24,7 +24,7 @@ module Humongous
           :password => ""
         }
         return @options if params.blank?
-        @options.merge({ :url => params[:url], :port => params[:port], :freeze => true })
+        @options.merge!({ :url => params[:url], :port => params[:port], :freeze => true })
       end
 
       def get_uri(params = {})

@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
   s.required_ruby_version = '>= 1.8.7'
   s.authors = ["bagwanpankaj"]
-  s.date = "2012-02-20"
+  s.date = "2014-02-06"
   s.description = "Humongous: A Ruby way to browse and maintain mongo instance. Using HTML5."
   s.email = "bagwanpankaj@gmail.com"
   s.executables = ["humongous"]
