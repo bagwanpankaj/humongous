@@ -1,3 +1,5 @@
+<a href='https://pledgie.com/campaigns/24601' style="float:right"><img alt='Click here to lend your support to: Humongous  and make a donation at pledgie.com !' src='https://pledgie.com/campaigns/24601.png?skin_name=chrome' border='0' ></a>
+<div style="clear:both;"></div>
 # Humongous
 
      _   _                                                   
