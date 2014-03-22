@@ -68,4 +68,3 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<json>, ["= 1.6.5"])
   end
 end
-
