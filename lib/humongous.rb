@@ -30,6 +30,14 @@ module Humongous
     %Q{An standalone Mongo Browser for Ruby. Just run and forget.}
   end
 
+  def self.copyright
+    "Bagwan Pankaj 2012-2014"
+  end
+
+  def self.author
+    "Bagwan Pankaj"
+  end
+
   def self.run!
     puts "#################################################"
     puts "You are using Humongous(#{Humongous.version})"

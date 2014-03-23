@@ -1,0 +1,51 @@
+<div id="loader" style="display:none" class="modal">
+  <div class="modal-body">
+    <img src="/images/ajax-loader.gif"></img>
+  </div>
+</div>
+<div id="login_dialog" style="display:none" class="modal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <!-- <a href="#" class="close">x</a> -->
+    <h3>Provide MongoDB Access Credentials</h3>
+  </div>
+  <div class="modal-body">
+    <form action="/" method="post">
+      <fieldset>
+        <div class="clearfix">
+          <label for="url">Host</label>
+          <div class="input">
+            <input type="text" placeholder="Host" value="localhost" name="url" size="30"></input>
+          </div>
+        </div>
+        <div class="clearfix">
+          <label for="port">Port</label>
+          <div class="input">
+            <input type="text" placeholder="Port" value="27017" name="port" size="30"></input>
+          </div>
+        </div>
+        <div class="clearfix">
+          <label for="auth_db">Database</label>
+          <div class="input">
+            <input type="text" placeholder="Database" name="auth[db]" size="30"></input>
+          </div>
+        </div>
+        <div class="clearfix">
+          <label for="auth_username">Username</label>
+          <div class="input">
+            <input type="text" placeholder="Username" name="auth[username]" size="30"></input>
+          </div>
+        </div>
+        <div class="clearfix">
+          <label for="auth_password">Password</label>
+          <div class="input">
+            <input type="password" placeholder="Password" name="auth[password]" size="30"></input>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn primary">Login</a>
+  </div>
+</div>

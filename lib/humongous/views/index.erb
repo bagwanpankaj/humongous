@@ -104,129 +104,14 @@
           </div>
         </div>
       </div>
-      <div id="credits" style="display:none" class="modal hide fade">
-        <div class="modal-header">
-          <a href="#" class="close">x</a>
-          <h3>About Humongous</h3>
-        </div>
-        <div class="modal-body">
-          <div class="credits">
-            <h5>Author</h5>
-            <p>Bagwan Pankaj</p>
-          </div>
-          <div class="credits">
-            <h5>Version</h5>
-            <p><%= Humongous.version %></p>
-          </div>
-          <div class="credits">
-            <h5>Summary</h5>
-            <p><%= Humongous.summary %></p>
-          </div>
-          <div class="credits">
-            <h5>Description</h5>
-            <p><%= Humongous.description %></p>
-          </div>
-          <div class="credits">
-            <h5>Credits</h5>
-            <ul>
-              <li>MongoHub: For simplistic UI navigation experience</li>
-              <li>Twitter Bootstrap: Making a non designer do the designing simple.</li>
-            </ul>
-          </div>
-        </div>
-        <div class="modal-footer"><span>&copy; Bagwan Pankaj 2012-2014</span></div>
-      </div>
-      
-      <div id="license" style="display:none" class="modal hide fade">
-        <div class="modal-header">
-          <a href="#" class="close">x</a>
-          <h3>Humongous License</h3>
-        </div>
-        <div class="modal-body">
-          <p>Copyright (c) 2012-2014 Bagwan Pankaj</p>
-          <p>
-            Permission is hereby granted, free of charge, to any person obtaining
-            a copy of this software and associated documentation files (the
-            "Software"), to deal in the Software without restriction, including
-            without limitation the rights to use, copy, modify, merge, publish,
-            distribute, sublicense, and/or sell copies of the Software, and to
-            permit persons to whom the Software is furnished to do so, subject to
-            the following conditions:
-          </p>
-          <p>
-            The above copyright notice and this permission notice shall be
-            included in all copies or substantial portions of the Software.
-          </p>
-          <p>
-            THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-            EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-            MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-            NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-            LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-            OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-            WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-          </p>
-        </div>
-        <div class="modal-footer"><span>&copy; Bagwan Pankaj 2012-2014</span></div>
-      </div>
-      <div id="loader" style="display:none" class="modal">
-        <div class="modal-body">
-          <img src="/images/ajax-loader.gif"></img>
-        </div>
-      </div>
-      <div id="login_dialog" style="display:none" class="modal">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <!-- <a href="#" class="close">x</a> -->
-          <h3>Provide MongoDB Access Credentials</h3>
-        </div>
-        <div class="modal-body">
-          <form action="/" method="post">
-            <fieldset>
-              <div class="clearfix">
-                <label for="url">Host</label>
-                <div class="input">
-                  <input type="text" placeholder="Host" value="localhost" name="url" size="30"></input>
-                </div>
-              </div>
-              <div class="clearfix">
-                <label for="port">Port</label>
-                <div class="input">
-                  <input type="text" placeholder="Port" value="27017" name="port" size="30"></input>
-                </div>
-              </div>
-              <div class="clearfix">
-                <label for="auth_db">Database</label>
-                <div class="input">
-                  <input type="text" placeholder="Database" name="auth[db]" size="30"></input>
-                </div>
-              </div>
-              <div class="clearfix">
-                <label for="auth_username">Username</label>
-                <div class="input">
-                  <input type="text" placeholder="Username" name="auth[username]" size="30"></input>
-                </div>
-              </div>
-              <div class="clearfix">
-                <label for="auth_password">Password</label>
-                <div class="input">
-                  <input type="password" placeholder="Password" name="auth[password]" size="30"></input>
-                </div>
-              </div>
-            </fieldset>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <a href="#" class="btn primary">Login</a>
-        </div>
-      </div>
 
-      <footer>
-        <p>&copy; Bagwan Pankaj 2012-2014</p>
-        <p>
-          <a href='https://pledgie.com/campaigns/24601'><img alt='Click here to lend your support to: Humongous  and make a donation at pledgie.com !' src='https://pledgie.com/campaigns/24601.png?skin_name=chrome' border='0' ></a>
-        </p>
-      </footer>
+      <%= erb :_credits %>
+      
+      <%= erb :_license %>
+
+      <%= erb :_login_dialog %>
+
+      <%= erb :_footer %>
 
     </div> <!-- /container -->
     <% if @force_login %>
