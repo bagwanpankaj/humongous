@@ -52,19 +52,19 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<sinatra>, ["= 1.3.2"])
       s.add_runtime_dependency(%q<bson_ext>, ["= 1.5.2"])
       s.add_runtime_dependency(%q<mongo>, ["= 1.5.2"])
-      s.add_runtime_dependency(%q<json>, ["= 1.6.5"])
+      s.add_runtime_dependency(%q<json>, ["= 1.8.3"])
     else
       s.add_dependency(%q<vegas>, ["= 0.1.8"])
       s.add_dependency(%q<sinatra>, ["= 1.3.2"])
       s.add_dependency(%q<bson_ext>, ["= 1.5.2"])
       s.add_dependency(%q<mongo>, ["= 1.5.2"])
-      s.add_dependency(%q<json>, ["= 1.6.5"])
+      s.add_dependency(%q<json>, ["= 1.8.3"])
     end
   else
     s.add_dependency(%q<vegas>, ["= 0.1.8"])
     s.add_dependency(%q<sinatra>, ["= 1.3.2"])
     s.add_dependency(%q<bson_ext>, ["= 1.5.2"])
     s.add_dependency(%q<mongo>, ["= 1.5.2"])
-    s.add_dependency(%q<json>, ["= 1.6.5"])
+    s.add_dependency(%q<json>, ["= 1.8.3"])
   end
 end
