@@ -17,11 +17,11 @@ module Humongous
   def self.version #:nodoc
     Humongous::VERSION
   end
-  
+
   def self.description
     %Q{
       Humongous: A Ruby way to browse and maintain mongo instance. Using HTML5.
-      This is beta version, So there is long way to go, but still you can enjoy its 
+      This is beta version, So there is long way to go, but still you can enjoy its
       simplistic design.
     }
   end
@@ -31,7 +31,7 @@ module Humongous
   end
 
   def self.copyright
-    "Bagwan Pankaj 2012-2014"
+    "Bagwan Pankaj 2012-2016"
   end
 
   def self.author

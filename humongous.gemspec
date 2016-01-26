@@ -36,6 +36,10 @@ Gem::Specification.new do |s|
     "lib/humongous/public/javascripts/storage.js",
     "lib/humongous/public/styles/application.css",
     "lib/humongous/public/styles/bootstrap.min.css",
+    "lib/humongous/views/_login_dialog.erb",
+    "lib/humongous/views/_license.erb",
+    "lib/humongous/views/_footer.erb",
+    "lib/humongous/views/_credits.erb",
     "lib/humongous/views/index.erb"
   ]
   s.homepage = "http://github.com/bagwanpankaj/humongous"

@@ -4,12 +4,12 @@
 
 [![Gem Version](https://badge.fury.io/rb/humongous.png)](http://badge.fury.io/rb/humongous)
 
-     _   _                                                   
-    | | | |_   _ _ __ ___   ___  _ __   __ _  ___  _   _ ___ 
+     _   _
+    | | | |_   _ _ __ ___   ___  _ __   __ _  ___  _   _ ___
     | |_| | | | | '_ ` _ \ / _ \| '_ \ / _` |/ _ \| | | / __|
     |  _  | |_| | | | | | | (_) | | | | (_| | (_) | |_| \__ \
     |_| |_|\__,_|_| |_| |_|\___/|_| |_|\__, |\___/ \__,_|___/
-                                       |___/                 
+                                       |___/
 
 
 
@@ -75,10 +75,10 @@ There are lot of things and area to improve and develop. Since it in pre release
 * Example series
 
 ## Contributing to Humongous
- 
+
 * Fork, branch, code, and then send me a pull request. :)
 
 ## Copyright
 
-Copyright (c) 2012-2014 [Bagwan Pankaj]. See LICENSE.txt for further details.
+Copyright (c) 2012-2016 [Bagwan Pankaj]. See LICENSE.txt for further details.
 
