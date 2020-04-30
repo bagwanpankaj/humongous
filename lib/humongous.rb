@@ -31,7 +31,7 @@ module Humongous
   end
 
   def self.copyright
-    "Bagwan Pankaj 2012-2016"
+    "Bagwan Pankaj 2012-2020"
   end
 
   def self.author
