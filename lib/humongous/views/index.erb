@@ -20,12 +20,12 @@
     <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="72x72" href="/images/apple-touch-icon-72x72.png">
     <link rel="apple-touch-icon" sizes="114x114" href="/images/apple-touch-icon-114x114.png">
-    
+
     <script type='text/javascript' src='/javascripts/jquery.min.js'></script>
     <script type='text/javascript' src='/javascripts/jquery.nohtml.js'></script>
     <script type='text/javascript' src='/javascripts/bootstrap-modal.js'></script>
     <script type='text/javascript' src='/javascripts/bootstrap-alerts.js'></script>
-    
+
     <script type='text/javascript' src='/javascripts/core.js'></script>
     <script type='text/javascript' src='/javascripts/storage.js'></script>
     <script type='text/javascript' src='/javascripts/query_browser.js'></script>
@@ -63,9 +63,9 @@
               <div class="database_list">
                 <table>
                   <tbody>
-                    <% @databases.each do | db_name, size | %>
+                    <% @databases.each do | db | %>
                       <tr>
-                        <td data-source=<%= "/database/#{db_name}" %>><%= db_name %></td>
+                        <td data-source=<%= "/database/#{db[:name]}" %>><%= db[:name] %></td>
                       </tr>
                     <% end %>
                   </tbody>
@@ -92,7 +92,7 @@
             <div class="yielder zebra-striped">
               <table>
                 <tbody>
-                  <% @server_info.each do | property, value | %>
+                  <% @server_info.first.each do | property, value | %>
                     <tr>
                       <th><%= property %></th>
                       <td><%= value %></td>
@@ -106,7 +106,7 @@
       </div>
 
       <%= erb :_credits %>
-      
+
       <%= erb :_license %>
 
       <%= erb :_login_dialog %>
@@ -122,5 +122,6 @@
         })
       </script>
     <% end %>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.11/ace.min.js" type="text/javascript" charset="utf-8" async defer></script>
   </body>
 </html>

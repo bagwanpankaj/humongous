@@ -1,10 +1,5 @@
 source 'http://rubygems.org'
-
-gem "sinatra", :require => "sinatra/base"
-gem "bson_ext"
-gem "mongo"
-gem "json"
-
+gemspec
 group :development do
   gem "rake"
   gem "rspec"

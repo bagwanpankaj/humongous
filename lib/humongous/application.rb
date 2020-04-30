@@ -4,7 +4,7 @@ module Humongous
 
   class Application < Sinatra::Base
     DEFAULT_OPTIONS = {
-      :url => "localhost",
+      :url => "127.0.0.1",
       :port => "27017",
       :username => "",
       :password => ""
@@ -29,19 +29,19 @@ module Humongous
       autanticate!
     end
 
-    error Mongo::ConnectionFailure do
+    error Mongo::Error::ConnectionCheckOutTimeout do
       halt 502, headers, "Humongous is unable to find MongoDB instance. Make sure that MongoDB is running."
     end
 
-    error Mongo::OperationFailure do
+    error Mongo::Error::OperationFailure do
       halt 401, {'Content-Type' => 'text/javascript'}, { :errmsg => "Need to login", :ok => false }.to_json
     end
 
-    error Mongo::InvalidNSName do
+    error Mongo::Error::InvalidDatabaseName do
       halt 502, headers, "Humongous is unable to find MongoDB instance. Make sure that MongoDB is running."
     end
 
-    error Mongo::AuthenticationError do
+    error Mongo::Error::AuthError do
       halt 502, headers, "Humongous is unable to find MongoDB instance. Make sure that MongoDB is running."
     end
 
@@ -49,13 +49,13 @@ module Humongous
 
     reciever = lambda do
       begin
-        @databases = @connection.database_info
-        @server_info = @connection.server_info
-        @header_string = "Server #{@connection.host}:#{@connection.port} stats"
-      rescue Mongo::OperationFailure => e
+        @databases = @connection.list_databases
+        @server_info = @connection.cluster.servers.collect{|c| c.scan!.config } #@connection.server_info
+        @header_string = "Server #{opts_to_connect[:url]}:#{opts_to_connect[:port]} stats"
+      rescue Mongo::Error::OperationFailure => e
         @databases = []
         @server_info = { :errmsg => "Need to login", :ok => false }
-        @header_string = "Server #{@connection.host}:#{@connection.port} stats"
+        @header_string = "Server #{opts_to_connect[:url]}:#{opts_to_connect[:port]} stats"
         @force_login = true
       end
       erb :index
@@ -65,22 +65,25 @@ module Humongous
     post "/", &reciever
 
     get "/database/:db_name" do
-      @database = @connection.db(params[:db_name])
+      @connection = @connection.use(params[:db_name])
+      @database = @connection.database
       @header_string = "Database #{@database.name} (#{@database.collection_names.size}) stats"
       content_type :json
-      { :collections => @database.collection_names, :stats => @database.stats, :header => @header_string }.to_json
+      { :collections => @database.collection_names, :stats => [], :header => @header_string }.to_json
     end
 
     get "/database/:db_name/collection/:collection_name" do
-      @database = @connection.db(params[:db_name])
+      @connection = @connection.use(params[:db_name])
+      @database = @connection.database
       @collection = @database.collection(params[:collection_name])
       content_type :json
-      { :stats => @collection.stats, :header => "Collection #{@database.name}.#{@collection.name} (#{@collection.stats.count}) stats" }.to_json
+      { :stats => [], :header => "Collection #{@database.name}.#{@collection.name} (#{@collection.count}) stats" }.to_json
     end
 
     delete "/database/:db_name/collection/:collection_name" do
-      @database = @connection.db(params[:db_name])
-      if @database.drop_collection(params[:collection_name])
+      @connection = @connection.use(params[:db_name])
+      @database = @connection.database
+      if @database.collection(params[:collection_name]).drop
         content_type :json
         { :status => "OK", :dropped => true }.to_json
       end
@@ -99,7 +102,8 @@ module Humongous
       opts[:sort] = JSON.parse(json_converter(params[:sort])) if params[:sort].present?
       opts[:limit] = params[:limit].to_i
       opts = default_opts.merge(opts)
-      @database = @connection.db(params[:db_name])
+      @connection = @connection.use(params[:db_name])
+      @database = @connection.database
       @collection = @database.collection(params[:collection_name])
       @records = @collection.find(selector,opts).to_a
       @records = @records.collect{|record| doc_to_bson(record, :from_bson) }
@@ -108,29 +112,33 @@ module Humongous
     end
 
     post "/database/:db_name/collection/:collection_name/save" do
-      @database = @connection.db(params[:db_name])
+      @connection = @connection.use(params[:db_name])
+      @database = @connection.database
       @collection = @database.collection(params[:collection_name])
       doc = params[:doc]
       doc = doc_to_bson(doc, :to_bson)
-      # doc["_id"] = BSON::ObjectId.from_string(doc["_id"])
-      @collection.save(doc)
+      @collection.update_one(doc)
       content_type :json
       { :status => "OK", :saved => true }.to_json
     end
 
     delete "/database/:db_name" do
       content_type :json
-      @connection.drop_database(params[:db_name]).to_json
+      @connection = @connection.use(params[:db_name])
+      drop_doc = @connection.database.drop
+      { :status => "OK", :saved => true, message: drop_doc.documents[0] }.to_json
     end
 
     post "/database" do
-      @connection.db(params["database_name"]).create_collection("test");
+      @connection = @connection.use(params[:database_name])
+      @connection.database["test"].create
       content_type :json
       { :status => "OK", :created => true, :name => params["database_name"] }.to_json
     end
 
     post "/database/:database_name/collection" do
-      @connection.db(params["database_name"]).create_collection(params[:collection_name]);
+      @connection = @connection.use(params[:database_name])
+      @connection.database[params[:collection_name]].create
       content_type :json
       { :status => "OK", :created => true, :name => params["collection_name"] }.to_json
     end
@@ -141,25 +149,27 @@ module Humongous
       query = JSON.parse(json_converter(params[:remove_query])) if params[:remove_query].present?
       query["_id"] = BSON::ObjectId.from_string(query["_id"]) if query.present? && query["_id"].present?
       selector = selector.merge(query) if !!query
-      @database = @connection.db(params["database_name"])
+      @connection = @connection.use(params[:database_name])
+      @database = @connection.database
       @collection = @database.collection(params["collection_name"])
       content_type :json
       { :removed => @collection.remove( selector, opts ), :status => "OK" }.to_json
     end
-    
+
     post "/database/:database_name/collection/:collection_name/insert" do
       created = false
-      @database = @connection.db(params[:database_name])
+      @connection = @connection.use(params[:database_name])
+      @database = @connection.database
       @collection = @database.collection(params[:collection_name])
       if params[:doc].present?
-        doc = JSON.parse(json_converter(params[:doc]))
-        @collection.insert(doc)
+        doc = JSON.parse(params[:doc])
+        @collection.insert_one(doc)
         created = true
       end
       content_type :json
       { :created => created, :id => true, :status => "OK" }.to_json
     end
-    
+
     post "/database/:database_name/collection/:collection_name/mapreduce" do
       opts = { :out => { :inline => true }, :raw => true }
       opts[:finalize] = params[:finalize] unless params[:finalize].blank?
@@ -167,7 +177,8 @@ module Humongous
       opts[:query] = JSON.parse(json_converter(params[:query])) unless params[:query].blank?
       opts[:sort] = params[:sort] unless params[:sort].blank?
       opts[:limit] = params[:limit] unless params[:limit].blank?
-      @database = @connection.db(params[:database_name])
+      @connection = @connection.use(params[:database_name])
+      @database = @connection.database
       @collection = @database.collection(params[:collection_name])
       content_type :json
       @collection.map_reduce( params[:map], params[:reduce], opts ).to_json
